@@ -18,8 +18,8 @@ L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?acce
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson";
 
 // Perform a GET request to the query URL
-d3.json(link).then(function(data) {
+d3.json(queryUrl).then(function(data) {
   // Creating a GeoJSON layer with the retrieved data
-  L.geoJson(data).addTo(map);
+  console.log(data)
 });
 
