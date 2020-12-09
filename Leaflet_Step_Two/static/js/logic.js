@@ -17,20 +17,21 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/signif
   
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
+    var earthquakes = L.geoJSON(data.features)
     console.log(data);
 
 // Loop thru the earthquaks data and create a color for a circle dependent on earthquaks' deepths
-    features.forEach(function(feature){
+    data.forEach(function(feature){
     
     var color = "";
 
-    if(features.geometry.coordinates[2] > 500){
+    if(feature.geometry.coordinates[2] > 500){
          color = "red";
         }
-    else if(features.geometry.coordinates[2] > 98){
+    else if(feature.geometry.coordinates[2] > 98){
         color = "orange";
         }
-    else if(features.geometry.coordinates[2] > 18){
+    else if(feature.geometry.coordinates[2] > 18){
         color = "yellow";
         }  
     else{
@@ -38,7 +39,7 @@ d3.json(queryUrl, function(data) {
         };
 
     // add circles to map
-    L.circle([features.geometry.coordinates[1], features.geometry.coordinates[0]],{
+    L.circle([feature.geometry.coordinates[1], feature.geometry.coordinates[0]],{
     fillOpacity: 0.75,
     color: "black",
     fillColor: color
