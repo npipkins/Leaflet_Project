@@ -1,6 +1,6 @@
 // Create a map object
 var myMap = L.map("map", {
-    center: [8.78, 124.51],
+    center: [14.60, 28.67],
     zoom: 2
 });
   
@@ -14,7 +14,10 @@ L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?acce
 
 //Store API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson";
-  
+
+function markerSize(mag){
+    return mag * 3;
+} 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
 
@@ -39,7 +42,7 @@ d3.json(queryUrl, function(data) {
             }
             //circleMarker
             return L.circleMarker(latlng, {
-                radius: 7,
+                radius: markerSize(feature.properties.mag),
                 fillColor: fillColor,
                 color: 'black',
                 weight: 1,
