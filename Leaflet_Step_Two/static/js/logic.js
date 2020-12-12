@@ -1,7 +1,7 @@
 // Create a map object
 var myMap = L.map("map", {
-    center: [37.09, -95.71],
-    zoom: 5
+    center: [8.78, 124.51],
+    zoom: 2
 });
   
 // Add a tile layer
@@ -17,37 +17,34 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/signif
   
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
-    var earthquakes = L.geoJSON(data.features)
-    console.log(data);
 
-// Loop thru the earthquaks data and create a color for a circle dependent on earthquaks' deepths
-    data.forEach(function(feature){
-    
-    var color = "";
-
-    if(feature.geometry.coordinates[2] > 500){
-         color = "red";
+//add earthquakes
+    L.geoJSON(data.features, {
+        pointToLayer: function (feature, latlng){
+            //switch fillColor
+            var fillColor;
+            switch (true) {
+                case (feature.geometry.coordinates[2] > 500):
+                    fillColor = 'red';
+                    break;
+                case (feature.geometry.coordinates[2] > 98):
+                    fillColor = 'orange';
+                    break;
+                case (feature.geometry.coordinates[2] > 18):
+                    fillColor = 'yellow';
+                    break;
+                default:
+                    fillColor = 'green';
+                    break;
+            }
+            //circleMarker
+            return L.circleMarker(latlng, {
+                radius: 7,
+                fillColor: fillColor,
+                color: 'black',
+                weight: 1,
+                fillOpacity: 0.75
+            })
         }
-    else if(feature.geometry.coordinates[2] > 98){
-        color = "orange";
-        }
-    else if(feature.geometry.coordinates[2] > 18){
-        color = "yellow";
-        }  
-    else{
-        color = "green"
-        };
-
-    // add circles to map
-    L.circle([feature.geometry.coordinates[1], feature.geometry.coordinates[0]],{
-    fillOpacity: 0.75,
-    color: "black",
-    fillColor: color
-    }).addTo(myMap);
-    })
+    }).addTo(myMap)
 });
-
-
-
-
-  
